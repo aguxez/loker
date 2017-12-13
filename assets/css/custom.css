@@ -1,0 +1,21 @@
+.summoners-container {
+  list-style: none;
+}
+
+@media screen and (max-width: 39.9375em) {
+  .summoners-container li {
+    font-size: 12px;
+  }
+}
+
+@media screen and (min-width: 40em) {
+  .summoners-container {
+    display: flex;
+    flex-direction: row;
+    text-align: center;
+  }
+
+  .summoners-container li {
+    margin-left: 4em;
+  }
+}

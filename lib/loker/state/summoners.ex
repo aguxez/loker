@@ -23,7 +23,16 @@ defmodule Loker.State.Summoners do
     do: {:via, Registry, {:summoners_game_registry, name}}
 
   # Server
-  def init(state), do: {:ok, state}
+  def init(state) do
+    kill_server()
+
+    {:ok, state}
+  end
+
+  defp kill_server,
+    do: Process.send_after(self(), :kill, 60_000 * 5)
+
+  def terminate(_reason, _), do: :ok
 
   def handle_cast({:save, game}, _state) do
     {:noreply, game}
@@ -31,5 +40,9 @@ defmodule Loker.State.Summoners do
 
   def handle_call(:game, _from, state) do
     {:reply, state, state}
+  end
+
+  def handle_info(:kill, state) do
+    {:stop, :normal, state}
   end
 end

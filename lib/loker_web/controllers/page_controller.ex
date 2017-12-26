@@ -25,11 +25,13 @@ defmodule LokerWeb.PageController do
     {:ok, game} =
       case Summoners.get_game_for(summoner) do
         [] ->
+          IO.inspect("requested game")
           {:ok, new_game} = Godfist.active_game(server, summoner)
           Summoners.save_game_for(summoner, new_game)
 
           {:ok, new_game}
         game ->
+          IO.inspect("game found")
           {:ok, game}
       end
 

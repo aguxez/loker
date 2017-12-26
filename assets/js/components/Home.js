@@ -11,6 +11,7 @@ export default class Home extends Component {
       server: 'NA',
       showGame: false,
       game: '',
+      error: false,
     }
 
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -34,9 +35,21 @@ export default class Home extends Component {
         server: this.state.server
       })
     })
+    .then(resp => {
+      if(!resp.ok) {
+        throw Error(resp.statusText)
+      }
+
+      return resp;
+    })
     .then(resp => { return resp.json() })
     .then(resp => {
       this.gameReady(resp);
+    })
+    .catch(err => {
+      this.setState({
+        error: true,
+      });
     })
 
     event.preventDefault();
@@ -56,12 +69,22 @@ export default class Home extends Component {
     this.setState({
       showGame: true,
       game: game,
+      error: false,
     });
   }
 
   render() {
     return(
       <div className="grid-x grid-margin-x">
+        <div className="small-12 cell">
+          {
+            this.state.error &&
+            <p className="callout alert">
+              An error ocurred while searching for your game
+            </p>
+          }
+        </div>
+
         <div className="text-center cell">
           <h1>Loker</h1>
         </div>
@@ -83,8 +106,12 @@ export default class Home extends Component {
 
                 <div className="small-5 cell">
                   <select value={this.state.server} onChange={this.handleSelectChange}>
-                    <option value="NA">NA</option>
+                    <option value="BR">BR</option>
+                    <option value="EUNE">EUNE</option>
+                    <option value="EUW">EUW</option>
                     <option value="LAN">LAN</option>
+                    <option value="LAS">LAS</option>
+                    <option value="NA">NA</option>
                   </select>
                 </div>
 
@@ -99,7 +126,9 @@ export default class Home extends Component {
         <div className="small-12 cell">
           {
             this.state.showGame &&
-            <Game game={this.state.game} />
+            <Game
+              game={this.state.game} csrf_token={this.props.csrf_token}
+            />
           }
         </div>
       </div>

@@ -1,1 +1,2 @@
-<%= react_component("Components.Home", %{csrf_token: @csrf_token}) %>
+<%= react_component("Components.Home",
+    %{csrf_token: @csrf_token}) %>

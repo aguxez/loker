@@ -5,6 +5,10 @@
 # is restricted to this project.
 use Mix.Config
 
+config :godfist,
+token: "RGAPI-c9f794f0-608c-4bef-aaee-87435d7a8381",
+rates: :dev
+
 # Configures the endpoint
 config :loker, LokerWeb.Endpoint,
   url: [host: "localhost"],

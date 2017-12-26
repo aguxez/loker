@@ -13,6 +13,7 @@ defmodule LokerWeb.Router do
     plug :accepts, ["json"]
 
     post "/find_game", LokerWeb.PageController, :find_game
+    post "/retrieve_summoner", LokerWeb.PageController, :get_summoner_info
   end
 
   scope "/", LokerWeb do

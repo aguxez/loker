@@ -1,4 +1,4 @@
-defmodule Loker.State.Summoners do
+defmodule Loker.State.SummonersGame do
   @moduledoc """
   Module in charge of saving games, kind of like a Cache for a certain amount of
   time, games are not saved forever.

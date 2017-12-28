@@ -1,7 +1,7 @@
 defmodule LokerWeb.PageController do
   use LokerWeb, :controller
 
-  alias Loker.State.Summoners
+  alias Loker.State.{SummonersGame, SummonersInfo}
   alias Godfist.DataDragon
 
   def index(conn, _params) do
@@ -19,15 +19,15 @@ defmodule LokerWeb.PageController do
       |> String.to_atom()
 
     # Initializes the 'cache'
-    Summoners.start_link(summoner)
+    SummonersGame.start_link(summoner)
 
     # This whole case statement can be a confusing since it repeats the var
     # names a little
     {:ok, game} =
-      case Summoners.get_game_for(summoner) do
+      case SummonersGame.get_game_for(summoner) do
         [] ->
           {:ok, new_game} = Godfist.active_game(server, summoner)
-          Summoners.save_game_for(summoner, new_game)
+          SummonersGame.save_game_for(summoner, new_game)
 
           {:ok, new_game}
         game ->
@@ -61,6 +61,8 @@ defmodule LokerWeb.PageController do
   end
 
   def get_summoner_info(conn, %{"summId" => summId, "champId" => champ_id} = params) do
+    SummonersInfo.start_link(summId)
+
     string_champ_id = to_string(champ_id)
     server =
       params["server"]
@@ -68,12 +70,23 @@ defmodule LokerWeb.PageController do
       |> String.to_atom()
 
     # Retrieving information of a single summoner.
-    # TODO: Add this to a 'cache' too
-    %{"tier" => tier, "rank" => rank} = get_solo_league(server, summId)
+    %{tier: tier, rank: rank, champ_loading: load_link} =
+      case SummonersInfo.get_info_for(summId) do
+        [] ->
+          %{"tier" => tier, "rank" => rank} = get_solo_league(server, summId)
 
-    # Look for a nicer way of doing this pattern match.
-    [%{^string_champ_id => load_link}] =
-      get_champs_icons([champ_id], &DataDragon.champ_loading/1)
+          # Look for a nicer way of doing this pattern match.
+          [%{^string_champ_id => load_link}] =
+            get_champs_icons([champ_id], &DataDragon.champ_loading/1)
+
+          summ_info = %{tier: tier, rank: rank, champ_loading: load_link}
+
+          SummonersInfo.save_info_for(summId, summ_info)
+          SummonersInfo.get_info_for(summId)
+        info ->
+          info
+      end
+
 
     json(conn, %{tier: tier, rank: rank, champ_loading: load_link})
   end

@@ -12,7 +12,8 @@ defmodule Loker.Application do
       supervisor(LokerWeb.Endpoint, []),
       # Start your own worker by calling: Loker.Worker.start_link(arg1, arg2, arg3)
       # worker(Loker.Worker, [arg1, arg2, arg3]),
-      supervisor(Registry, [:unique, :summoners_game_registry]),
+      supervisor(Registry, [:unique, :summoners_game_registry], id: :reg_1),
+      supervisor(Registry, [:unique, :summoners_info_registry], id: :reg_2),
       supervisor(Loker.Supervisors.SummonersSup, []),
     ]
 

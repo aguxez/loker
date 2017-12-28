@@ -5,14 +5,18 @@ defmodule Loker.Supervisors.SummonersSup do
 
   use Supervisor
 
-  alias Loker.State.Summoners
+  alias Loker.State.{SummonersGame, SummonersInfo}
 
   def start_link,
     do: Supervisor.start_link(__MODULE__, [], name: __MODULE__)
 
   def init(_arg) do
     Supervisor.init([
-      {Summoners, []},
+      {SummonersGame, []}
+    ], strategy: :simple_one_for_one)
+
+    Supervisor.init([
+      {SummonersInfo, []}
     ], strategy: :simple_one_for_one)
   end
 end

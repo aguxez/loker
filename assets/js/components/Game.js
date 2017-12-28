@@ -1,21 +1,49 @@
 import React, { Component } from "react";
-import Summoner, { fetchSummonerInfo } from "./Summoner";
+import Summoner from "./Summoner";
 
 export default class Game extends Component {
   constructor(props) {
     super(props);
 
+    // 'summonerInfo' is the state of the request when a single summoner is
+    // retrieved.
     this.state = {
       isActive: null,
+      summonerInfo: null,
+      showSummoner: false
     }
 
     this.handleClick = this.handleClick.bind(this);
+    this.doRenderSummoner = this.doRenderSummoner.bind(this);
   }
 
-  handleClick(i, summoner, champId) {
-    this.setState({ isActive: i })
+  handleClick(i, summId, champId, server) {
+    this.setState({
+      isActive: i,
+      showSummoner: false
+    })
 
-    fetchSummonerInfo(summoner, champId);
+    fetch('/retrieve_summoner', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        summId: summId,
+        champId: champId,
+        server: server
+      })
+    })
+    .then(resp => { return resp.json() })
+    .then(resp => {
+      this.setState({
+        summonerInfo: resp,
+        showSummoner: true
+      })
+    })
+  }
+
+  doRenderSummoner(summId, champId, server) {
   }
 
   render() {
@@ -43,7 +71,12 @@ export default class Game extends Component {
                     <td>
                       <div
                         onClick={() =>
-                          this.handleClick(key, x.summonerName, x.championId)
+                          this.handleClick(
+                            key,
+                            x.summonerId,
+                            x.championId,
+                            this.props.server
+                          )
                         }
                       >
                         <img
@@ -56,7 +89,14 @@ export default class Game extends Component {
                           key={key}
                           className={`summInfo ${this.state.isActive === key ? 'slide' : ''}`}
                         >
-                          <Summoner />
+                          {
+                            this.state.showSummoner &&
+                            <Summoner
+                              tier={this.state.summonerInfo.tier}
+                              rank={this.state.summonerInfo.rank}
+                              champLoading={this.state.summonerInfo.champ_loading}
+                            />
+                          }
                         </div>
                       </div>
                     </td>

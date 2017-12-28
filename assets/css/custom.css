@@ -38,3 +38,8 @@
   height: 20em;
   display: inherit;
 }
+
+.champLoading {
+  height: 15em;
+  margin-top: 2.5em;
+}

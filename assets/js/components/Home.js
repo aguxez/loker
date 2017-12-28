@@ -127,7 +127,9 @@ export default class Home extends Component {
           {
             this.state.showGame &&
             <Game
-              game={this.state.game} csrf_token={this.props.csrf_token}
+              game={this.state.game}
+              csrf_token={this.props.csrf_token}
+              server={this.state.server}
             />
           }
         </div>

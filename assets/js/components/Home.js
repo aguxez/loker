@@ -21,6 +21,9 @@ export default class Home extends Component {
   }
 
   handleSubmit(event) {
+    this.setState({
+      showGame: false
+    })
     // Before submitting the csrf_token is a props passed from the PageController
     // using 'Plug'
 
@@ -64,8 +67,6 @@ export default class Home extends Component {
   }
 
   gameReady(game) {
-    console.log(game);
-
     this.setState({
       showGame: true,
       game: game,

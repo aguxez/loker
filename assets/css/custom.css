@@ -43,3 +43,13 @@
   height: 15em;
   margin-top: 2.5em;
 }
+
+.tier {
+  height: 6em;
+  margin: 4em 0 0 1em;
+}
+
+.rank {
+  margin-left: 3.1em;
+  font-weight: bold;
+}

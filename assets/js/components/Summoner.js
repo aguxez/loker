@@ -8,11 +8,21 @@ export default class Summoner extends Component {
   render() {
     console.log(this.props, "props")
     return(
-      <div>
-        <img
-          className="champLoading"
-          src={this.props.champLoading}
-        />
+      <div className="grid-x grid-padding-x">
+        <div className="small-6 cell">
+          <img
+            className="champLoading"
+            src={this.props.champLoading}
+          />
+        </div>
+
+        <div className="small-6 cell">
+          <img
+            className="tier"
+            src={"/images/ranks/" + this.props.tier + ".png"}
+          />
+          <h2 className="rank">{this.props.rank}</h2>
+        </div>
       </div>
     )
   }

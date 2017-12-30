@@ -14,7 +14,6 @@ export default class Game extends Component {
     }
 
     this.handleClick = this.handleClick.bind(this);
-    this.doRenderSummoner = this.doRenderSummoner.bind(this);
   }
 
   handleClick(i, summId, champId, server) {
@@ -43,7 +42,10 @@ export default class Game extends Component {
     })
   }
 
-  doRenderSummoner(summId, champId, server) {
+  componentWillUnmount() {
+    this.setState({
+      isActive: null
+    })
   }
 
   render() {

@@ -14,5 +14,5 @@ Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
 * Follow the configuration on [Godfist](https://github.com/aguxez/godfist)
 
 ## TODO
--[ ] Add more information when user is clicked.
--[ ] DRY code on `Game.js` file.
+- [ ] Add more information when user is clicked.
+- [ ] DRY code on `Game.js` file.

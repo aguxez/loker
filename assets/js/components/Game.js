@@ -117,18 +117,43 @@ export default class Game extends Component {
           </thead>
 
           <tbody>
-            {game.participants.map(x => {
+            {game.participants.map((x, key) => {
               if (x.teamId === 200) {
                 let iconPosition = champIds.indexOf(x.championId)
 
                 return([
                   <tr>
                     <td>
-                      <img
-                        src={champSquares[iconPosition]}
-                        className="champ-square"
-                      />
-                      {x.summonerName}
+                      <div
+                        onClick={() =>
+                          this.handleClick(
+                            key,
+                            x.summonerId,
+                            x.championId,
+                            this.props.server
+                          )
+                        }
+                      >
+                        <img
+                          src={champSquares[iconPosition]}
+                          className="champ-square"
+                        />
+                        {x.summonerName}
+
+                        <div
+                          key={key}
+                          className={`summInfo ${this.state.isActive === key ? 'slide' : ''}`}
+                        >
+                          {
+                            this.state.showSummoner &&
+                            <Summoner
+                              tier={this.state.summonerInfo.tier}
+                              rank={this.state.summonerInfo.rank}
+                              champLoading={this.state.summonerInfo.champ_loading}
+                            />
+                          }
+                        </div>
+                      </div>
                     </td>
                   </tr>
                 ])
